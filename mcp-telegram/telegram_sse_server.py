@@ -7,28 +7,31 @@ import json
 import os
 from fastmcp import FastMCP
 
+def load_telegram_token():
+    with open(".telegram_token.txt", "r") as f:
+        return f.read().strip()
+
 mcp: FastMCP = FastMCP("App")
 
 app = FastAPI()
 messages = asyncio.Queue()
 
-TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")  # Set your bot token as an environment variable
+TELEGRAM_TOKEN = load_telegram_token()
 
 # Handler for incoming Telegram messages
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
     user_id = update.message.from_user.id
+    print(f"Received message from {user_id}: {text}")
     await messages.put({"user_id": user_id, "text": text})
-
-def start_telegram_bot():
-    application = Application.builder().token(TELEGRAM_TOKEN).build()
-    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    application.run_polling()
 
 @app.on_event("startup")
 async def startup_event():
-    loop = asyncio.get_event_loop()
-    loop.create_task(asyncio.to_thread(start_telegram_bot))
+    application = Application.builder().token(TELEGRAM_TOKEN).build()
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    await application.initialize()
+    asyncio.create_task(application.start())
+    asyncio.create_task(application.updater.start_polling())
 
 @app.get("/sse")
 async def sse_endpoint(request: Request):
@@ -55,5 +58,11 @@ async def list_tools():
             }
         }
     ])
+
+@app.post("/send_message")
+async def send_message(user_id: int, text: str):
+    application = Application.builder().token(TELEGRAM_TOKEN).build()
+    await application.bot.send_message(chat_id=user_id, text=text)
+    return {"status": "sent"}
 
 app.mount("/", mcp.sse_app())

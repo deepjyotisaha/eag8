@@ -1,1 +1,164 @@
-2025-04-27 22:00:31,685 - INFO -      _handle_request() Processing request of type ListToolsRequest
+2025-04-28 01:21:46,287 - INFO -      _handle_request() Processing request of type CallToolRequest
+2025-04-28 01:21:46,288 - INFO -              mcp_log() INFO: Extracting PDF: C:\Users\dsaha\OneDrive - Microsoft\Documents\Personal\deep\study\artificial intelligence\eagv1\eag8\sample\How to use Canvas LMS.pdf
+2025-04-28 01:21:48,279 - INFO -              mcp_log() INFO: Indexing documents with unified RAG pipeline...
+2025-04-28 01:21:48,556 - INFO -              mcp_log() INFO: Replacing images with captions: ![](images/How-to-use-Canvas-LMS.pdf-0-0.png)
+# **How to use** **Canvas LMS**
+### Step by step guide
+
+
+-----
+
+## **Check your mail box**
+
+
+![](images/How-to-use-Canvas-LMS.pdf-1-0.png)
+
+![](images/How-to-use-Canvas-LMS.pdf-1-1.png)
+
+-----
+
+## **Click the blue link**
+
+
+![](images/How-to-use-Canvas-LMS.pdf-2-0.png)
+
+![](images/How-to-use-Canvas-LMS.pdf-2-1.png)
+
+-----
+
+## **Click Accept**
+
+
+![](images/How-to-use-Canvas-LMS.pdf-3-0.png)
+
+-----
+
+## **Click Accept**
+
+
+![](images/How-to-use-Canvas-LMS.pdf-4-0.png)
+
+-----
+
+## **Click "Create My Account"**
+
+
+![](images/How-to-use-Canvas-LMS.pdf-5-0.png)
+
+-----
+
+## **Click "Create My Account"**
+
+
+![](images/How-to-use-Canvas-LMS.pdf-6-0.png)
+
+-----
+
+## **Password & IST**
+### • add password • select Indian Standard Time • select "I agree ..."
+
+
+-----
+
+## **Start using LMS!**
+
+
+-----
+
+
+2025-04-28 01:21:48,722 - INFO -              mcp_log() SKIP: Skipping unchanged file: cricket.txt
+2025-04-28 01:21:49,223 - INFO -              mcp_log() SKIP: Skipping unchanged file: DELETE_IMAGES.pdf
+2025-04-28 01:21:49,280 - INFO -              mcp_log() SKIP: Skipping unchanged file: dlf.md
+2025-04-28 01:21:49,326 - INFO -              mcp_log() SKIP: Skipping unchanged file: DLF_13072023190044_BRSR.pdf
+2025-04-28 01:21:49,353 - INFO -              mcp_log() SKIP: Skipping unchanged file: economic.md
+2025-04-28 01:21:49,384 - INFO -              mcp_log() PROC: Processing: Experience Letter.docx
+2025-04-28 01:21:49,690 - INFO -              mcp_log() INFO: Using MarkItDown fallback for Experience Letter.docx
+2025-04-28 01:21:49,888 - INFO -              mcp_log() ERROR: Failed to process Experience Letter.docx: File conversion failed after 2 attempts:
+ - DocxConverter threw BadZipFile with message: File is not a zip file
+ - XlsConverter threw XLRDError with message: Can't find workbook in OLE2 compound document
+
+2025-04-28 01:21:49,944 - INFO -              mcp_log() SKIP: Skipping unchanged file: How to use Canvas LMS.pdf
+2025-04-28 01:21:50,063 - INFO -              mcp_log() SKIP: Skipping unchanged file: INVG67564.pdf
+2025-04-28 01:21:50,103 - INFO -              mcp_log() SKIP: Skipping unchanged file: markitdown.md
+2025-04-28 01:21:50,126 - INFO -              mcp_log() PROC: Processing: SAMPLE-Indian-Policies-and-Procedures-January-2023.docx
+2025-04-28 01:21:50,280 - INFO -              mcp_log() INFO: Using MarkItDown fallback for SAMPLE-Indian-Policies-and-Procedures-January-2023.docx
+2025-04-28 01:21:50,303 - INFO -              mcp_log() ERROR: Failed to process SAMPLE-Indian-Policies-and-Procedures-January-2023.docx: File conversion failed after 2 attempts:
+ - DocxConverter threw BadZipFile with message: File is not a zip file
+ - XlsConverter threw XLRDError with message: Can't find workbook in OLE2 compound document
+
+2025-04-28 01:21:50,376 - INFO -              mcp_log() SKIP: Skipping unchanged file: Tesla_Motors_IP_Open_Innovation_and_the_Carbon_Crisis_-_Matthew_Rimmer.pdf
+2025-04-28 01:21:51,374 - INFO -              mcp_log() INFO: Caption generated: [No caption returned]
+2025-04-28 01:21:53,524 - INFO -              mcp_log() INFO: Caption generated: [No caption returned]
+2025-04-28 01:21:55,635 - INFO -              mcp_log() INFO: Caption generated: [No caption returned]
+2025-04-28 01:21:57,813 - INFO -              mcp_log() INFO: Caption generated: [No caption returned]
+2025-04-28 01:22:00,043 - INFO -              mcp_log() INFO: Caption generated: [No caption returned]
+2025-04-28 01:22:02,185 - INFO -              mcp_log() INFO: Caption generated: [No caption returned]
+2025-04-28 01:22:04,346 - INFO -              mcp_log() INFO: Caption generated: [No caption returned]
+2025-04-28 01:22:06,446 - INFO -              mcp_log() INFO: Caption generated: [No caption returned]
+2025-04-28 01:22:08,543 - INFO -              mcp_log() INFO: Caption generated: [No caption returned]
+2025-04-28 01:22:08,555 - INFO -              mcp_log() INFO: Extracted PDF: **Image:** [No caption returned]
+# **How to use** **Canvas LMS**
+### Step by step guide
+
+
+-----
+
+## **Check your mail box**
+
+
+**Image:** [No caption returned]
+
+**Image:** [No caption returned]
+
+-----
+
+## **Click the blue link**
+
+
+**Image:** [No caption returned]
+
+**Image:** [No caption returned]
+
+-----
+
+## **Click Accept**
+
+
+**Image:** [No caption returned]
+
+-----
+
+## **Click Accept**
+
+
+**Image:** [No caption returned]
+
+-----
+
+## **Click "Create My Account"**
+
+
+**Image:** [No caption returned]
+
+-----
+
+## **Click "Create My Account"**
+
+
+**Image:** [No caption returned]
+
+-----
+
+## **Password & IST**
+### • add password • select Indian Standard Time • select "I agree ..."
+
+
+-----
+
+## **Start using LMS!**
+
+
+-----
+
+
+2025-04-28 01:22:08,556 - INFO -      _handle_message() Warning: PydanticDeprecatedSince211: Accessing the 'model_fields' attribute on the instance is deprecated. Instead, you should access this attribute from the model class. Deprecated in Pydantic V2.11 to be removed in V3.0.

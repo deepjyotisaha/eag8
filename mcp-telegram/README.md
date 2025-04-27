@@ -1,0 +1,1 @@
+uv run uvicorn telegram_sse_server:app --reload --port 8002
