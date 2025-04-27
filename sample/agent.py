@@ -67,8 +67,10 @@ if __name__ == "__main__":
 # How much Anmol singh paid for his DLF apartment via Capbridge? (This uses RAG)
 # What is the log value of the amount that Anmol singh paid for his DLF apartment via Capbridge? (This runs the log funtion via python code)
 # Summarize this page: https://theschoolof.ai/ (This uses search and summarize)
+# What is this document all about? Can you summarize it for me? "C:\Users\dsaha\OneDrive - Microsoft\Documents\Personal\deep\study\artificial intelligence\eagv1\eag8\sample\How to use Canvas LMS.pdf" (This uses PDF)
 # What do you know about Don Tapscott and Anthony Williams?
 # What is the relationship between Gensol and Go-Auto?
 # which course are we teaching on Canvas LMS?
+
 
 # 

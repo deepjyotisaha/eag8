@@ -1,0 +1,1 @@
+uv run uvicorn src.gmail.gmail_sse_server:app --reload --port 8001
