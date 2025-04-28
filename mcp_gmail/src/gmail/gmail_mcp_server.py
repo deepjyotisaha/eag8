@@ -92,97 +92,114 @@ PROMPTS = {
 
 def get_gmail_tools():
     return [
-            types.Tool(
-                name="send-email",
-                description="""Sends email to recipient. 
-                Do not use if user only asked to draft email. 
-                Drafts must be approved before sending.""",
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "recipient_id": {
-                            "type": "string",
-                            "description": "Recipient email address",
-                        },
-                        "subject": {
-                            "type": "string",
-                            "description": "Email subject",
-                        },
-                        "message": {
-                            "type": "string",
-                            "description": "Email content text",
-                        },
+        types.Tool(
+            name="send-email",
+            description=(
+                "Sends email to recipient. "
+                "Do not use if user only asked to draft email. "
+                "Drafts must be approved before sending. "
+                'Usage: send-email|recipient_id="someone@example.com"|subject="Hello"|message="Body text"'
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "recipient_id": {
+                        "type": "string",
+                        "description": "Recipient email address",
                     },
-                    "required": ["recipient_id", "subject", "message"],
-                },
-            ),
-            types.Tool(
-                name="trash-email",
-                description="""Moves email to trash. 
-                Confirm before moving email to trash.""",
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "email_id": {
-                            "type": "string",
-                            "description": "Email ID",
-                        },
+                    "subject": {
+                        "type": "string",
+                        "description": "Email subject",
                     },
-                    "required": ["email_id"],
-                },
-            ),
-            types.Tool(
-                name="get-unread-emails",
-                description="Retrieve unread emails",
-                inputSchema={
-                    "type": "object",
-                    "properties": {},
-                    "required": []
-                },
-            ),
-            types.Tool(
-                name="read-email",
-                description="Retrieves given email content",
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "email_id": {
-                            "type": "string",
-                            "description": "Email ID",
-                        },
+                    "message": {
+                        "type": "string",
+                        "description": "Email content text",
                     },
-                    "required": ["email_id"],
                 },
+                "required": ["recipient_id", "subject", "message"],
+            },
+        ),
+        types.Tool(
+            name="trash-email",
+            description=(
+                "Moves email to trash. Confirm before moving email to trash. "
+                'Usage: trash-email|email_id="abc123"'
             ),
-            types.Tool(
-                name="mark-email-as-read",
-                description="Marks given email as read",
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "email_id": {
-                            "type": "string",
-                            "description": "Email ID",
-                        },
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "email_id": {
+                        "type": "string",
+                        "description": "Email ID",
                     },
-                    "required": ["email_id"],
                 },
+                "required": ["email_id"],
+            },
+        ),
+        types.Tool(
+            name="get-unread-emails",
+            description=(
+                "Retrieve unread emails. "
+                "Usage: get-unread-emails"
             ),
-            types.Tool(
-                name="open-email",
-                description="Open email in browser",
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "email_id": {
-                            "type": "string",
-                            "description": "Email ID",
-                        },
+            inputSchema={
+                "type": "object",
+                "properties": {},
+                "required": []
+            },
+        ),
+        types.Tool(
+            name="read-email",
+            description=(
+                "Retrieves given email content. "
+                'Usage: read-email|email_id="abc123"'
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "email_id": {
+                        "type": "string",
+                        "description": "Email ID",
                     },
-                    "required": ["email_id"],
                 },
+                "required": ["email_id"],
+            },
+        ),
+        types.Tool(
+            name="mark-email-as-read",
+            description=(
+                "Marks given email as read. "
+                'Usage: mark-email-as-read|email_id="abc123"'
             ),
-        ]
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "email_id": {
+                        "type": "string",
+                        "description": "Email ID",
+                    },
+                },
+                "required": ["email_id"],
+            },
+        ),
+        types.Tool(
+            name="open-email",
+            description=(
+                "Open email in browser. "
+                'Usage: open-email|email_id="abc123"'
+            ),
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "email_id": {
+                        "type": "string",
+                        "description": "Email ID",
+                    },
+                },
+                "required": ["email_id"],
+            },
+        ),
+    ]
 
 async def handle_list_tools():
     return get_gmail_tools()

@@ -133,14 +133,18 @@ class MultiMCP:
                                     print("[agent] Session created, initializing...")
                                     await session.initialize()
                                     print("[agent] MCP session initialized")
-                                    tools = await session.list_tools()
-                                    print(f"→ Tools received: {[tool.name for tool in tools.tools]}")
-                                    for tool in tools.tools:
-                                        tool_obj = to_tool_obj(tool)
-                                        self.tool_map[tool_obj.name] = {
-                                            "config": config,
-                                            "tool": tool_obj
-                                        }
+                                    async with sse_client(url=config["url"] + "/sse") as (read, write):
+                                        async with ClientSession(read, write) as session:
+                                            await session.initialize()
+                                            tools_result = await session.list_tools()
+                                            tools = tools_result.tools
+                                            print(f"→ Tools received: {[tool.name for tool in tools]}")
+                                            for tool in tools:
+                                                tool_obj = to_tool_obj(tool)
+                                                self.tool_map[tool_obj.name] = {
+                                                    "config": config,
+                                                    "tool": tool_obj
+                                                }
                             except Exception as se:
                                 print(f"❌ Session error: {se}")
                     except Exception as e:
@@ -188,15 +192,11 @@ class MultiMCP:
             finally:
                 await self._cleanup()
         elif config["type"] == "sse":
-            url = config["url"] + "/sse"
-            try:
-                async with sse_client(url=url) as (read, write):
-                    async with ClientSession(read, write) as session:
-                        await session.initialize()
-                        await session.send_ping()
-                        return await session.call_tool(tool_name, arguments)
-            finally:
-                await self._cleanup()
+            async with sse_client(url=config["url"] + "/sse") as (read, write):
+                async with ClientSession(read, write) as session:
+                    await session.initialize()
+                    await session.send_ping()
+                    return await session.call_tool(tool_name, arguments)
         else:
             raise ValueError(f"Unknown server type: {config['type']}")
 

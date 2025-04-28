@@ -80,7 +80,7 @@ Follow the examples, and look into the error messages to improve the plan.
 - ⏳ You have 3 attempts. Final attempt must end with FINAL_ANSWER.
 """
 
-
+    print(f"plan prompt: {prompt}")
 
     try:
         raw = (await model.generate_text(prompt)).strip()
