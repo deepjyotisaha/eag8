@@ -1,5 +1,5 @@
 [project]
-name = "gmail-sse"
+name = "mcp-sse-gmail"
 version = "0.1.0"
 description = "Gmail SSE server with FastAPI and Google API integration"
 readme = "README.md"

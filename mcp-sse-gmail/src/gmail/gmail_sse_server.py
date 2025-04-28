@@ -4,7 +4,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import StreamingResponse, JSONResponse
 import asyncio
 import json
-from .gmail_mcp_server import GmailService, handle_list_tools 
+from .gmail_mcp_server import GmailService, get_gmail_tools 
 import os
 
 
@@ -23,7 +23,12 @@ app = FastAPI()
 
 @mcp.tool(name="send-email")
 async def send_email(recipient_id: str, subject: str, message: str) -> str:
-    """Send an email using GmailService."""
+    """
+    Sends email to recipient.
+    Do not use if user only asked to draft email.
+    Drafts must be approved before sending.
+    Usage: send-email|recipient_id="someone@example.com"|subject="Hello"|message="Body text"
+    """
     result = await gmail_service.send_email(recipient_id, subject, message)
     if result["status"] == "success":
         return f"Email sent successfully. Message ID: {result['message_id']}"
@@ -32,29 +37,44 @@ async def send_email(recipient_id: str, subject: str, message: str) -> str:
 
 @mcp.tool(name="get-unread-emails")
 async def get_unread_emails() -> str:
-    """Get unread emails using GmailService."""
+    """
+    Retrieve unread emails.
+    Usage: get-unread-emails
+    """
     result = await gmail_service.get_unread_emails()
     return str(result)
 
 @mcp.tool(name="read-email")
 async def read_email(email_id: str) -> str:
-    """Read an email using GmailService."""
+    """
+    Retrieves given email content.
+    Usage: read-email|email_id="abc123"
+    """
     result = await gmail_service.read_email(email_id)
     return str(result)
 
 @mcp.tool(name="trash-email")
 async def trash_email(email_id: str) -> str:
-    """Trash an email using GmailService."""
+    """
+    Moves email to trash. Confirm before moving email to trash.
+    Usage: trash-email|email_id="abc123"
+    """
     return await gmail_service.trash_email(email_id)
 
 @mcp.tool(name="mark-email-as-read")
 async def mark_email_as_read(email_id: str) -> str:
-    """Mark an email as read using GmailService."""
+    """
+    Marks given email as read.
+    Usage: mark-email-as-read|email_id="abc123"
+    """
     return await gmail_service.mark_email_as_read(email_id)
 
 @mcp.tool(name="open-email")
 async def open_email(email_id: str) -> str:
-    """Open an email in the browser using GmailService."""
+    """
+    Open email in browser.
+    Usage: open-email|email_id="abc123"
+    """
     return await gmail_service.open_email(email_id)
 
 @app.get("/test")
@@ -65,10 +85,10 @@ async def test():
 
 @app.get("/list_tools")
 async def list_tools():
-    # Call the same function used in your stdio server for tool listing
-    tools = await handle_list_tools()
-    # Convert Pydantic models or custom objects to dict if needed
+    tools = get_gmail_tools()
+    print("tools:", tools)
     tools_dict = [t.dict() if hasattr(t, "dict") else t for t in tools]
+    print("tools_dict:", tools_dict)
     return JSONResponse(content=tools_dict)
 
 # Mount the SSE MCP server

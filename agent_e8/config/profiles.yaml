@@ -40,9 +40,15 @@ mcp_servers:
   - id: gmail
     url: http://localhost:8001
     type: sse
+    description: "Gmail SSE Server"
+    retry_attempts: 3
+    timeout: 30
   - id: telegram
     type: sse
     url: http://localhost:8002
+    description: "Telegram SSE Server"
+    retry_attempts: 3
+    timeout: 30
 
 
 

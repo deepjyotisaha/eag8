@@ -6,6 +6,8 @@ import asyncio
 import json
 import os
 from fastmcp import FastMCP
+#from fastmcp.models import ToolCall
+#from fastmcp.types import ToolCall
 
 def load_telegram_token():
     with open(".telegram_token.txt", "r") as f:
@@ -14,6 +16,7 @@ def load_telegram_token():
 mcp: FastMCP = FastMCP("TelegramApp")
 app = FastAPI()
 messages = asyncio.Queue()
+pending_telegram_messages = asyncio.Queue()
 
 TELEGRAM_TOKEN = load_telegram_token()
 
@@ -25,7 +28,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
     last_chat_id = update.message.chat_id
     print(f"Received message from {last_chat_id}: {text}")
-    await messages.put({"user_id": last_chat_id, "text": text})
+    await pending_telegram_messages.put({"user_id": last_chat_id, "text": text})
 
 @app.on_event("startup")
 async def startup_event():
@@ -67,7 +70,22 @@ async def send_telegram_message(text: str) -> str:
     application = Application.builder().token(TELEGRAM_TOKEN).build()
     await application.bot.send_message(chat_id=last_chat_id, text=text)
     #await messages.put({"user_id": last_chat_id, "text": f"[BOT]: {text}"})
-    return "Message sent!"
+    return f"The following message: {text} was sent to user_id:{last_chat_id}"
+
+@mcp.tool(name="get-next-telegram-message")
+async def get_next_telegram_message() -> dict:
+    """
+    Fetch the next pending Telegram message.
+
+    Usage:
+        get-next-telegram-message
+
+    Returns:
+        dict: {"user_id": int, "text": str}
+    """
+    msg = await pending_telegram_messages.get()
+    print("msg:", msg)
+    return msg
 
 @app.get("/test")
 async def test():

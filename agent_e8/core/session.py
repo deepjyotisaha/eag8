@@ -127,43 +127,34 @@ class MultiMCP:
                     print(f"→ Scanning tools from: {config['script']} in {params.cwd}")
                     try:
                         async with stdio_client(params) as (read, write):
-                            print("Connection established, creating session...")
-                            try:
-                                async with ClientSession(read, write) as session:
-                                    print("[agent] Session created, initializing...")
-                                    await session.initialize()
-                                    print("[agent] MCP session initialized")
-                                    async with sse_client(url=config["url"] + "/sse") as (read, write):
-                                        async with ClientSession(read, write) as session:
-                                            await session.initialize()
-                                            tools_result = await session.list_tools()
-                                            tools = tools_result.tools
-                                            print(f"→ Tools received: {[tool.name for tool in tools]}")
-                                            for tool in tools:
-                                                tool_obj = to_tool_obj(tool)
-                                                self.tool_map[tool_obj.name] = {
-                                                    "config": config,
-                                                    "tool": tool_obj
-                                                }
-                            except Exception as se:
-                                print(f"❌ Session error: {se}")
+                            async with ClientSession(read, write) as session:
+                                await session.initialize()
+                                tools_result = await session.list_tools()
+                                tools = tools_result.tools
+                                print(f"→ Tools received: {[tool.name for tool in tools]}")
+                                for tool in tools:
+                                    tool_obj = to_tool_obj(tool)
+                                    self.tool_map[tool_obj.name] = {
+                                        "config": config,
+                                        "tool": tool_obj
+                                    }
                     except Exception as e:
-                        print(f"❌ Connection error: {e}")
+                        print(f"❌ STDIO Connection error: {e}")
                 elif config["type"] == "sse":
-                    url = config["url"] + "/list_tools"
-                    print(f"→ Scanning tools from SSE server at: {url}")
+                    print(f"→ Scanning tools from SSE server at: {config['url']}")
                     try:
-                        async with httpx.AsyncClient() as client:
-                            response = await client.get(url)
-                            response.raise_for_status()
-                            tools = response.json()
-                            print(f"→ Tools received from SSE: {[tool['name'] for tool in tools]}")
-                            for tool in tools:
-                                tool_obj = to_tool_obj(tool)
-                                self.tool_map[tool_obj.name] = {
-                                    "config": config,
-                                    "tool": tool_obj
-                                }
+                        async with sse_client(url=f"{config['url']}/sse") as (read, write):
+                            async with ClientSession(read, write) as session:
+                                await session.initialize()
+                                tools_result = await session.list_tools()
+                                tools = tools_result.tools
+                                print(f"→ Tools received from SSE: {[tool.name for tool in tools]}")
+                                for tool in tools:
+                                    tool_obj = to_tool_obj(tool)
+                                    self.tool_map[tool_obj.name] = {
+                                        "config": config,
+                                        "tool": tool_obj
+                                    }
                     except Exception as e:
                         print(f"❌ SSE Connection error: {e}")
                 else:
@@ -178,27 +169,27 @@ class MultiMCP:
             raise ValueError(f"Tool '{tool_name}' not found on any server.")
 
         config = entry["config"]
-        if config["type"] == "stdio":
-            params = StdioServerParameters(
-                command="uv",
-                args=["run", config["script"]],
-                cwd=config.get("cwd", os.getcwd())
-            )
-            try:
+        try:
+            if config["type"] == "stdio":
+                params = StdioServerParameters(
+                    command="uv",
+                    args=["run", config["script"]],
+                    cwd=config.get("cwd", os.getcwd())
+                )
                 async with stdio_client(params) as (read, write):
                     async with ClientSession(read, write) as session:
                         await session.initialize()
                         return await session.call_tool(tool_name, arguments)
-            finally:
-                await self._cleanup()
-        elif config["type"] == "sse":
-            async with sse_client(url=config["url"] + "/sse") as (read, write):
-                async with ClientSession(read, write) as session:
-                    await session.initialize()
-                    await session.send_ping()
-                    return await session.call_tool(tool_name, arguments)
-        else:
-            raise ValueError(f"Unknown server type: {config['type']}")
+            elif config["type"] == "sse":
+                async with sse_client(url=f"{config['url']}/sse") as (read, write):
+                    async with ClientSession(read, write) as session:
+                        await session.initialize()
+                        return await session.call_tool(tool_name, arguments)
+        except Exception as e:
+            print(f"❌ Error calling tool {tool_name}: {e}")
+            raise
+        finally:
+            await self._cleanup()
 
     async def list_all_tools(self) -> List[str]:
         return list(self.tool_map.keys())

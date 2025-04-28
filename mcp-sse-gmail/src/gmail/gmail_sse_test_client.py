@@ -22,6 +22,7 @@ async def main():
 
             print("Listing available tools...")
             tools = await session.list_tools()
+            print("tools:", tools)
             for tool in tools.tools:
                 print(f"Name: {tool.name}")
                 print(f"Description: {tool.description}\n")
@@ -29,7 +30,7 @@ async def main():
             # Call the send_email tool
             print("Calling tool: send_email")
             send_result = await session.call_tool(
-                name="send_email",
+                name="send-email",
                 arguments={
                     "recipient_id": "deepjyoti.saha@gmail.com",
                     "subject": "Test Email from MCP SSE Client",

@@ -201,8 +201,6 @@ def get_gmail_tools():
         ),
     ]
 
-async def handle_list_tools():
-    return get_gmail_tools()
 
 def decode_mime_header(header: str) -> str: 
     """Helper function to decode encoded email headers"""
@@ -478,100 +476,6 @@ async def main(creds_file_path: str,
 
         raise ValueError("Prompt implementation not found")
 
-    @server.list_tools()
-    async def handle_list_tools() -> list[types.Tool]:
-        return [
-            types.Tool(
-                name="send-email",
-                description="""Sends email to recipient. 
-                Do not use if user only asked to draft email. 
-                Drafts must be approved before sending.""",
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "recipient_id": {
-                            "type": "string",
-                            "description": "Recipient email address",
-                        },
-                        "subject": {
-                            "type": "string",
-                            "description": "Email subject",
-                        },
-                        "message": {
-                            "type": "string",
-                            "description": "Email content text",
-                        },
-                    },
-                    "required": ["recipient_id", "subject", "message"],
-                },
-            ),
-            types.Tool(
-                name="trash-email",
-                description="""Moves email to trash. 
-                Confirm before moving email to trash.""",
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "email_id": {
-                            "type": "string",
-                            "description": "Email ID",
-                        },
-                    },
-                    "required": ["email_id"],
-                },
-            ),
-            types.Tool(
-                name="get-unread-emails",
-                description="Retrieve unread emails",
-                inputSchema={
-                    "type": "object",
-                    "properties": {},
-                    "required": []
-                },
-            ),
-            types.Tool(
-                name="read-email",
-                description="Retrieves given email content",
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "email_id": {
-                            "type": "string",
-                            "description": "Email ID",
-                        },
-                    },
-                    "required": ["email_id"],
-                },
-            ),
-            types.Tool(
-                name="mark-email-as-read",
-                description="Marks given email as read",
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "email_id": {
-                            "type": "string",
-                            "description": "Email ID",
-                        },
-                    },
-                    "required": ["email_id"],
-                },
-            ),
-            types.Tool(
-                name="open-email",
-                description="Open email in browser",
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "email_id": {
-                            "type": "string",
-                            "description": "Email ID",
-                        },
-                    },
-                    "required": ["email_id"],
-                },
-            ),
-        ]
 
     @server.call_tool()
     async def handle_call_tool(
