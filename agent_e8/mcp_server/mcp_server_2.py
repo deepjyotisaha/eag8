@@ -23,20 +23,6 @@ import trafilatura
 import pymupdf4llm
 import re
 import base64 # ollama needs base64-encoded-image
-import logging
-
-# Configure logging at the start of your file
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(funcName)20s() %(message)s',
-        handlers=[
-        logging.FileHandler('mcp_server_2.log', mode='w', encoding='utf-8'),
-        logging.StreamHandler(sys.stdout)
-    ]
-)
-
-logger = logging.getLogger(__name__)
-
 
 
 mcp = FastMCP("Calculator")
@@ -65,10 +51,8 @@ def chunk_text(text, size=CHUNK_SIZE, overlap=CHUNK_OVERLAP):
         yield " ".join(words[i:i+size])
 
 def mcp_log(level: str, message: str) -> None:
-    #sys.stderr.write(f"{level}: {message}\n")
-    #sys.stderr.flush()
-    logger.info(f"{level}: {message}")
-
+    sys.stderr.write(f"{level}: {message}\n")
+    sys.stderr.flush()
 
 # === CHUNKING ===
 
@@ -95,9 +79,9 @@ No – if they are about different topics and should be separated
 
 Just respond in one word (Yes or No), and do not provide any further explanation.
 """
-    mcp_log(f"\n🔍 Comparing chunk {index} and {index+1}")
-    mcp_log(f"  Chunk {index} → {chunk1[:60]}{'...' if len(chunk1) > 60 else ''}")
-    mcp_log(f"  Chunk {index+1} → {chunk2[:60]}{'...' if len(chunk2) > 60 else ''}")
+    print(f"\n🔍 Comparing chunk {index} and {index+1}")
+    print(f"  Chunk {index} → {chunk1[:60]}{'...' if len(chunk1) > 60 else ''}")
+    print(f"  Chunk {index+1} → {chunk2[:60]}{'...' if len(chunk2) > 60 else ''}")
 
     response = requests.post(OLLAMA_CHAT_URL, json={
         "model": PHI_MODEL,
@@ -106,7 +90,7 @@ Just respond in one word (Yes or No), and do not provide any further explanation
     })
     response.raise_for_status()
     reply = response.json().get("message", {}).get("content", "").strip().lower()
-    mcp_log(f"  ✅ Model reply: {reply}")
+    print(f"  ✅ Model reply: {reply}")
     return reply.startswith("yes")
 
 
@@ -181,12 +165,10 @@ def caption_image(img_url_or_path: str) -> str:
 
 
 def replace_images_with_captions(markdown: str) -> str:
-    mcp_log("INFO", f"Replacing images with captions: {markdown}")
     def replace(match):
         alt, src = match.group(1), match.group(2)
         try:
             caption = caption_image(src)
-            mcp_log("INFO", f"Caption generated: {caption}")
             # Attempt to delete only if local and file exists
             if not src.startswith("http"):
                 img_path = Path(__file__).parent / "documents" / src
@@ -218,14 +200,12 @@ def extract_webpage(input: UrlInput) -> MarkdownOutput:
     ) or ""
 
     markdown = replace_images_with_captions(markdown)
-    mcp_log("INFO", f"Extracted webpage: {markdown}")
     return MarkdownOutput(markdown=markdown)
 
 @mcp.tool()
 def extract_pdf(input: FilePathInput) -> MarkdownOutput:
     """Convert PDF file content to markdown format. Usage: extract_pdf|input={"file_path": "documents/dlf.pdf"}"""
 
-    mcp_log("INFO", f"Extracting PDF: {input.file_path}")
     if not os.path.exists(input.file_path):
         return MarkdownOutput(markdown=f"File not found: {input.file_path}")
 
@@ -248,7 +228,6 @@ def extract_pdf(input: FilePathInput) -> MarkdownOutput:
     )
 
     markdown = replace_images_with_captions(markdown)
-    mcp_log("INFO", f"Extracted PDF: {markdown}")
     return MarkdownOutput(markdown=markdown)
 
 
@@ -333,8 +312,6 @@ def process_documents():
     METADATA_FILE = INDEX_CACHE / "metadata.json"
     CACHE_FILE = INDEX_CACHE / "doc_index_cache.json"
 
-    mcp_log("INFO", f"Indexing documents from: {ROOT / 'documents'}")
-
     def file_hash(path):
         return hashlib.md5(Path(path).read_bytes()).hexdigest()
 
@@ -404,11 +381,8 @@ def process_documents():
                 faiss.write_index(index, str(INDEX_FILE))
                 mcp_log("SAVE", f"Saved FAISS index and metadata after processing {file.name}")
 
-            mcp_log("INFO", f"Processed {file.name}")
         except Exception as e:
             mcp_log("ERROR", f"Failed to process {file.name}: {e}")
-
-    mcp_log("INFO", "Indexing documents completed.")
 
 
 

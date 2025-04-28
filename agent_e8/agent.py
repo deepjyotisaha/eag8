@@ -61,12 +61,15 @@ async def main():
 
         try:
             final_response = await agent.run()
-            print("\n💡 Final Answer:\n", final_response.replace("FINAL_ANSWER:", "").strip())
+            if interaction_channel == "CLI":
+                print("\n💡 Final Answer:\n", final_response.replace("FINAL_ANSWER:", "").strip())
+            elif interaction_channel == "Telegram":
+                await multi_mcp.call_tool("send-telegram-message", {"message": final_response.replace("FINAL_ANSWER:", "").strip()})
         except Exception as e:
             log("fatal", f"Agent failed: {e}")
             raise
 
-        await multi_mcp.shutdown()
+    await multi_mcp.shutdown()
 
 
 
