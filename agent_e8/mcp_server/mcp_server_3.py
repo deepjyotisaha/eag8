@@ -21,7 +21,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(funcName)20s() %(message)s',
         handlers=[
-        logging.FileHandler('mcp_server_3.log', mode='w'),
+        logging.FileHandler('mcp_server_3.log', mode='w', encoding='utf-8'),
         logging.StreamHandler(sys.stdout)
     ]
 )

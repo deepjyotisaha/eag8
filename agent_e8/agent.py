@@ -5,6 +5,7 @@ import yaml
 from core.loop import AgentLoop
 from core.session import MultiMCP
 import warnings
+import os
 
 from config.log_config import setup_logging
 
@@ -26,15 +27,29 @@ async def main():
     with open("config/profiles.yaml", "r") as f:
         profile = yaml.safe_load(f)
         mcp_servers = profile.get("mcp_servers", [])
+        interaction_channel = profile.get("interaction_channel", "CLI")
+
+    print("interaction_channel:", interaction_channel)
 
     multi_mcp = MultiMCP(server_configs=mcp_servers)
     print("Agent before initialize")
     await multi_mcp.initialize()
 
-    print("🧠 Cortex-R Agent is now ready to go!")
+    print("🧠 Cortex-R Agent is now ready to go and is listening for messages from the user at:", interaction_channel)
 
     while True:
-        user_input = input("🧑 What do you want to solve today? (type 'exit' to quit) → ")
+        if interaction_channel == "CLI":
+            user_input = input("🧑 What do you want to solve today? (type 'exit' to quit) → ")
+            # === CLI Mode ===
+        elif interaction_channel == "Telegram":
+            try:
+                result = await multi_mcp.call_tool("get-next-telegram-message", {})
+                user_input = result.content[0].text
+                print(f"Telegram message: {user_input}")
+            except Exception as e:
+                print(f"Error polling Telegram: {e}")
+                await asyncio.sleep(2)  
+
         if user_input.strip().lower() in {"exit", "quit", ""}:
             print("👋 Goodbye!")
             break
@@ -51,7 +66,8 @@ async def main():
             log("fatal", f"Agent failed: {e}")
             raise
 
-    await multi_mcp.shutdown()
+        await multi_mcp.shutdown()
+
 
 
 if __name__ == "__main__":

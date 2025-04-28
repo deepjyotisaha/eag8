@@ -50,6 +50,8 @@ mcp_servers:
     retry_attempts: 3
     timeout: 30
 
+interaction_channel: Telegram
+
 
 
 # config/profiles.yaml → Agent Profiles / Persona Settings

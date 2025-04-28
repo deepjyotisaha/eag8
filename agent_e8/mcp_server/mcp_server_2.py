@@ -30,7 +30,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(funcName)20s() %(message)s',
         handlers=[
-        logging.FileHandler('mcp_server_3.log', mode='w'),
+        logging.FileHandler('mcp_server_2.log', mode='w', encoding='utf-8'),
         logging.StreamHandler(sys.stdout)
     ]
 )
@@ -95,9 +95,9 @@ No – if they are about different topics and should be separated
 
 Just respond in one word (Yes or No), and do not provide any further explanation.
 """
-    print(f"\n🔍 Comparing chunk {index} and {index+1}")
-    print(f"  Chunk {index} → {chunk1[:60]}{'...' if len(chunk1) > 60 else ''}")
-    print(f"  Chunk {index+1} → {chunk2[:60]}{'...' if len(chunk2) > 60 else ''}")
+    mcp_log(f"\n🔍 Comparing chunk {index} and {index+1}")
+    mcp_log(f"  Chunk {index} → {chunk1[:60]}{'...' if len(chunk1) > 60 else ''}")
+    mcp_log(f"  Chunk {index+1} → {chunk2[:60]}{'...' if len(chunk2) > 60 else ''}")
 
     response = requests.post(OLLAMA_CHAT_URL, json={
         "model": PHI_MODEL,
@@ -106,7 +106,7 @@ Just respond in one word (Yes or No), and do not provide any further explanation
     })
     response.raise_for_status()
     reply = response.json().get("message", {}).get("content", "").strip().lower()
-    print(f"  ✅ Model reply: {reply}")
+    mcp_log(f"  ✅ Model reply: {reply}")
     return reply.startswith("yes")
 
 
@@ -333,6 +333,8 @@ def process_documents():
     METADATA_FILE = INDEX_CACHE / "metadata.json"
     CACHE_FILE = INDEX_CACHE / "doc_index_cache.json"
 
+    mcp_log("INFO", f"Indexing documents from: {ROOT / 'documents'}")
+
     def file_hash(path):
         return hashlib.md5(Path(path).read_bytes()).hexdigest()
 
@@ -402,8 +404,11 @@ def process_documents():
                 faiss.write_index(index, str(INDEX_FILE))
                 mcp_log("SAVE", f"Saved FAISS index and metadata after processing {file.name}")
 
+            mcp_log("INFO", f"Processed {file.name}")
         except Exception as e:
             mcp_log("ERROR", f"Failed to process {file.name}: {e}")
+
+    mcp_log("INFO", "Indexing documents completed.")
 
 
 

@@ -20,6 +20,19 @@ import hashlib
 from pydantic import BaseModel
 import subprocess
 import sqlite3
+import logging
+
+# Configure logging at the start of your file
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(funcName)20s() %(message)s',
+        handlers=[
+        logging.FileHandler('mcp_server_1.log', mode='w', encoding='utf-8'),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+
+logger = logging.getLogger(__name__)
 
 
 class PythonCodeInput(BaseModel):

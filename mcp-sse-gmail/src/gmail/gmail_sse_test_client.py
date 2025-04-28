@@ -22,7 +22,7 @@ async def main():
 
             print("Listing available tools...")
             tools = await session.list_tools()
-            print("tools:", tools)
+            #print("tools:", tools)
             for tool in tools.tools:
                 print(f"Name: {tool.name}")
                 print(f"Description: {tool.description}\n")
