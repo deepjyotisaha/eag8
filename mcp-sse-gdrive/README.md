@@ -1,0 +1,1 @@
+uv run uvicorn src.mcp_sse_gdrive.google_drive_sse_server:app --reload --port 8003

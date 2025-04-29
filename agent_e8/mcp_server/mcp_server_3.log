@@ -1,1 +1,3 @@
-2025-04-28 23:28:43,254 - INFO -      _handle_request() Processing request of type ListToolsRequest
+2025-04-29 01:10:02,065 - INFO -      _handle_request() Processing request of type CallToolRequest
+2025-04-29 01:10:02,066 - INFO -               search() Searching DuckDuckGo for: Current F1 Racers Point Standings
+2025-04-29 01:10:03,593 - INFO - _send_single_request() HTTP Request: POST https://html.duckduckgo.com/html "HTTP/1.1 200 OK"

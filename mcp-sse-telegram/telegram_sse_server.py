@@ -83,9 +83,13 @@ async def get_next_telegram_message() -> dict:
     Returns:
         dict: {"user_id": int, "text": str}
     """
-    msg = await pending_telegram_messages.get()
-    print("msg:", msg)
-    return msg
+    try:
+        msg = await pending_telegram_messages.get()
+        print("msg:", msg)
+        return msg
+    except Exception as e:
+        print("Error in get_next_telegram_message:", repr(e))
+        raise
 
 @app.get("/test")
 async def test():

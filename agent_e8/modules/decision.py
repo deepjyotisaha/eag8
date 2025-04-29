@@ -78,6 +78,19 @@ Follow the examples, and look into the error messages to improve the plan.
 - ✅ Use nested keys like `input.string` or `input.int_list`, and square brackets for lists.
 - 💡 If no tool fits or you're unsure, end with: FINAL_ANSWER: [unknown]
 - ⏳ You have 3 attempts. Final attempt must end with FINAL_ANSWER.
+
+VERY IMPORTANT RULE:
+- ❌ NEVER NEVER USE "|" inside argument values for function calls; if you encounter argument values with "|" especially in the list format, dealing with emails, web content etc., you MUST CHOOSE ALTERNATE SEPERATOR OR FORMATs
+For Example:
+
+NEVER SEND THIS:
+1. Max Verstappen - 437 | Lando Norris - 374
+
+SEND THIS INSTEAD:
+
+  1. Max Verstappen - 437
+  2. Lando Norris - 374
+  ...
 """
 
     print(f"plan prompt: {prompt}")
