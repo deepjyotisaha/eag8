@@ -92,4 +92,6 @@ if __name__ == "__main__":
 # What do you know about Don Tapscott and Anthony Williams?
 # What is the relationship between Gensol and Go-Auto?
 # which course are we teaching on Canvas LMS?
-# 
+# Find the Current Point Standings of F1 Racers from the web, then put that into a Google Excel Sheet in Google Drive, and then share the link to this sheet with me on deepjyoti.saha@gmail.com. If a spreadsheet already exists in Google Drive, update it and dont create a new one. Your email should be well formatted in markdown and readable.
+
+

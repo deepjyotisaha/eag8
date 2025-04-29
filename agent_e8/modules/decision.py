@@ -77,7 +77,7 @@ Follow the examples, and look into the error messages to improve the plan.
 - ❌ NEVER output explanation text — only structured FUNCTION_CALL or FINAL_ANSWER.
 - ✅ Use nested keys like `input.string` or `input.int_list`, and square brackets for lists.
 - 💡 If no tool fits or you're unsure, end with: FINAL_ANSWER: [unknown]
-- ⏳ You have 3 attempts. Final attempt must end with FINAL_ANSWER.
+- ⏳ You have {max_steps} attempts. Final attempt must end with FINAL_ANSWER. Give FINAL_ANSWER only once you have completed all the tasks mentioned in the user's request.
 
 VERY IMPORTANT RULE:
 - ❌ NEVER NEVER USE "|" inside argument values for function calls; if you encounter argument values with "|" especially in the list format, dealing with emails, web content etc., you MUST CHOOSE ALTERNATE SEPERATOR OR FORMATs
@@ -93,7 +93,7 @@ SEND THIS INSTEAD:
   ...
 """
 
-    print(f"plan prompt: {prompt}")
+    #print(f"plan prompt: {prompt}")
 
     try:
         raw = (await model.generate_text(prompt)).strip()

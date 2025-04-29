@@ -4,6 +4,12 @@ from typing import Dict, Any, Union
 from pydantic import BaseModel
 import ast
 
+from config.log_config import setup_logging
+
+logger = setup_logging(__name__)
+
+
+
 # Optional logging fallback
 try:
     from agent import log
@@ -11,7 +17,7 @@ except ImportError:
     import datetime
     def log(stage: str, msg: str):
         now = datetime.datetime.now().strftime("%H:%M:%S")
-        print(f"[{now}] [{stage}] {msg}")
+        logger.info(f"[{now}] [{stage}] {msg}")
 
 
 class ToolCallResult(BaseModel):
