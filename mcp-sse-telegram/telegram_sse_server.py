@@ -67,8 +67,14 @@ async def send_telegram_message(text: str) -> str:
     global last_chat_id
     if not last_chat_id:
         return "No chat_id available"
-    application = Application.builder().token(TELEGRAM_TOKEN).build()
-    await application.bot.send_message(chat_id=last_chat_id, text=text)
+    print(f"Sending message to {last_chat_id}: {text}")
+    try:
+        application = Application.builder().token(TELEGRAM_TOKEN).build()
+        await application.bot.send_message(chat_id=last_chat_id, text=text)
+        print(f"Message sent to {last_chat_id}: {text}")
+    except Exception as e:
+        print(f"Error sending message to {last_chat_id}: {text}")
+        print(f"Error: {e}")
     #await messages.put({"user_id": last_chat_id, "text": f"[BOT]: {text}"})
     return f"The following message: {text} was sent to user_id:{last_chat_id}"
 

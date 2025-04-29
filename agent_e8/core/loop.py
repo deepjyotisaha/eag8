@@ -42,6 +42,8 @@ class AgentLoop:
                 # 🧠 Perception
                 perception_raw = await extract_perception(query)
 
+                await asyncio.sleep(0.2)
+
 
                 # ✅ Exit cleanly on FINAL_ANSWER
                 # ✅ Handle string outputs safely before trying to parse
@@ -100,6 +102,7 @@ class AgentLoop:
                     memory_items=retrieved,
                     all_tools=self.tools
                 )
+                await asyncio.sleep(0.2)
                 print(f"[plan] {plan}")
 
                 if "FINAL_ANSWER:" in plan:

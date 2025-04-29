@@ -233,7 +233,7 @@ fetcher = WebContentFetcher()
 @mcp.tool()
 async def search(query: str, ctx: Context, max_results: int = 10) -> str:
     """
-    Search DuckDuckGo and return formatted results.
+    Search DuckDuckGo and return formatted results. DuckDuckGo is a search engine that is used to search the web for information.
 
     Args:
         query: The search query string

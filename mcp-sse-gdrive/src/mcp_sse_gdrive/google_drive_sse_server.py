@@ -94,7 +94,7 @@ async def create_document(title: str, content: Optional[str] = None) -> str:
 @mcp.tool(name="read-spreadsheet")
 async def read_spreadsheet(spreadsheet_id: str, range_name: str = 'Sheet1') -> str:
     """
-    Read content from a Google Spreadsheet.
+    Read content from an existing Google Spreadsheet.
     Usage: read-spreadsheet|spreadsheet_id="1234..."|range_name="Sheet1!A1:B10"
     """
     result = await drive_service.read_spreadsheet(spreadsheet_id, range_name)
@@ -112,7 +112,7 @@ async def read_document(document_id: str) -> str:
 @mcp.tool(name="update-spreadsheet")
 async def update_spreadsheet(spreadsheet_id: str, range_name: str, values: List[List]) -> str:
     """
-    Update content in a Google Spreadsheet.
+    Update content in an existing Google Spreadsheet.
     Usage: update-spreadsheet|spreadsheet_id="1234..."|range_name="Sheet1!A1"|values=[["New", "Values"]]
     """
     result = await drive_service.update_spreadsheet(spreadsheet_id, range_name, values)

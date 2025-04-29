@@ -92,6 +92,8 @@ if __name__ == "__main__":
 # What do you know about Don Tapscott and Anthony Williams?
 # What is the relationship between Gensol and Go-Auto?
 # which course are we teaching on Canvas LMS?
-# Find the Current Point Standings of F1 Racers from the web, then put that into a Google Excel Sheet in Google Drive, and then share the link to this sheet with me on deepjyoti.saha@gmail.com. If a spreadsheet already exists in Google Drive, update it and dont create a new one. Your email should be well formatted in markdown and readable.
+# Find the current point standings of F1 Racers from the internet, then put the results into a Google Excel Sheet in Google Drive, and then share the link to this sheet with me on deepjyoti.saha@gmail.com. While wriiing the result into the spreadsheet, first check if a spreadsheet already exists in Google Drive, with a similar name, if yes, then update the results in the existing spreadsheet with the new results, make sure to update the exact cells; else if no spreadsheet exists, then create a new spreadsheet and update the results; Your email should be well formatted in HTML format.
+
+#- ✅ When searching rely on first reponse from tools, as that is the best response probably. However, ALWAYS check if the response is already available in memory via a previous tool call with same parameters, as that is the most efficient use of time and resources.
 
 
