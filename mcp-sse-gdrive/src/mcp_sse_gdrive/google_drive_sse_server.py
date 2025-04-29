@@ -44,8 +44,31 @@ drive_service = GoogleDriveService(CREDS_FILE_PATH, TOKEN_PATH)
 @mcp.tool(name="search-files")
 async def search_files(query: str) -> str:
     """
-    Search for files in Google Drive.
-    Usage: search-files|query="name contains 'document'"
+    Search for files in Google Drive using Google Drive API query syntax.
+    
+    Common query patterns:
+    1. Search by file type:
+       - For Spreadsheets: query="mimeType='application/vnd.google-apps.spreadsheet'"
+       - For Docs: query="mimeType='application/vnd.google-apps.document'"
+       
+    2. Search by name:
+       - Exact match: query="name='example.txt'"
+       - Contains: query="name contains 'example'"
+       
+    3. Search by modification time:
+       - Recent files: query="modifiedTime > '2024-01-01T00:00:00'"
+       
+    4. Combined searches:
+       - Recent spreadsheets: query="mimeType='application/vnd.google-apps.spreadsheet' and modifiedTime > '2024-01-01T00:00:00'"
+       - Named docs: query="mimeType='application/vnd.google-apps.document' and name contains 'Report'"
+       
+    5. Owner-based search:
+       - Files owned by you: query="'me' in owners"
+       
+    Usage examples:
+    - search-files|query="mimeType='application/vnd.google-apps.spreadsheet' and name contains 'F1 Standings'"
+    - search-files|query="mimeType='application/vnd.google-apps.document' or mimeType='application/vnd.google-apps.spreadsheet'"
+    - search-files|query="name contains 'Project' and modifiedTime > '2024-01-01T00:00:00'"
     """
     result = await drive_service.search_files(query)
     return str(result)
