@@ -10,8 +10,15 @@ from fastmcp import FastMCP
 #from fastmcp.types import ToolCall
 
 def load_telegram_token():
-    with open(".telegram_token.txt", "r") as f:
-        return f.read().strip()
+    try:
+        with open(".telegram_token.txt", "r") as f:
+            token = f.read().strip()
+            print("DEBUG: Token loaded successfully")
+            print(f"DEBUG: Token length: {len(token)}")
+            return token
+    except Exception as e:
+        print(f"DEBUG: Error loading token: {e}")
+        raise
 
 mcp: FastMCP = FastMCP("TelegramApp")
 app = FastAPI()
@@ -26,32 +33,22 @@ last_chat_id = None
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global last_chat_id
     text = update.message.text
+    old_chat_id = last_chat_id
     last_chat_id = update.message.chat_id
-    print(f"Received message from {last_chat_id}: {text}")
+    print(f"DEBUG: Chat ID updated from {old_chat_id} to {last_chat_id}")
+    print(f"DEBUG: Message received: {text}")
     await pending_telegram_messages.put({"user_id": last_chat_id, "text": text})
 
 @app.on_event("startup")
 async def startup_event():
+    global last_chat_id
+    print(f"DEBUG: Initial last_chat_id state: {last_chat_id}")
     application = Application.builder().token(TELEGRAM_TOKEN).build()
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     await application.initialize()
     asyncio.create_task(application.start())
     asyncio.create_task(application.updater.start_polling())
 
-
-@mcp.tool(name="telegram-query")
-async def telegram_query(user_id: int, text: str) -> str:
-    """
-    Triggered by a Telegram message.
-
-    Arguments:
-        user_id (int): The Telegram user ID who sent the message.
-        text (str): The message text.
-
-    Usage:
-        telegram-query|user_id=123456|text="Hello"
-    """
-    return f"Received from {user_id}: {text}"
 
 @mcp.tool(name="send-telegram-message")
 async def send_telegram_message(text: str) -> str:
@@ -63,20 +60,33 @@ async def send_telegram_message(text: str) -> str:
 
     Usage:
         send-telegram-message|text="Hello from the agent!"
+
+    Returns:
+        str: Confirmation message with details of the sent message
     """
     global last_chat_id
     if not last_chat_id:
+        print("[telegram_sse_server.py][send_telegram_message] DEBUG: No chat_id available")
         return "No chat_id available"
-    print(f"Sending message to {last_chat_id}: {text}")
+    
+    print(f"[telegram_sse_server.py][send_telegram_message] DEBUG: Attempting to send message:")
+    print(f"[telegram_sse_server.py][send_telegram_message] - Chat ID: {last_chat_id}")
+    print(f"[telegram_sse_server.py][send_telegram_message] - Message: {text}")
+    
     try:
         application = Application.builder().token(TELEGRAM_TOKEN).build()
-        await application.bot.send_message(chat_id=last_chat_id, text=text)
-        print(f"Message sent to {last_chat_id}: {text}")
+        await application.bot.send_message(
+            chat_id=last_chat_id, 
+            text=text
+        )
+        print(f"[telegram_sse_server.py][send_telegram_message] DEBUG: Message successfully sent")
+        return f"Message sent successfully to {last_chat_id}: {text}"
     except Exception as e:
-        print(f"Error sending message to {last_chat_id}: {text}")
-        print(f"Error: {e}")
-    #await messages.put({"user_id": last_chat_id, "text": f"[BOT]: {text}"})
-    return f"The following message: {text} was sent to user_id:{last_chat_id}"
+        print(f"[telegram_sse_server.py][send_telegram_message] DEBUG: Error details:")
+        print(f"[telegram_sse_server.py][send_telegram_message] - Error type: {type(e).__name__}")
+        print(f"[telegram_sse_server.py][send_telegram_message] - Error message: {str(e)}")
+        print(f"[telegram_sse_server.py][send_telegram_message] - Chat ID type: {type(last_chat_id)}")
+        return f"Error sending message: {str(e)}"
 
 @mcp.tool(name="get-next-telegram-message")
 async def get_next_telegram_message() -> dict:
@@ -90,11 +100,12 @@ async def get_next_telegram_message() -> dict:
         dict: {"user_id": int, "text": str}
     """
     try:
+        print(f"DEBUG: Current queue size: {pending_telegram_messages.qsize()}")
         msg = await pending_telegram_messages.get()
-        print("msg:", msg)
+        print(f"DEBUG: Retrieved message: {msg}")
         return msg
     except Exception as e:
-        print("Error in get_next_telegram_message:", repr(e))
+        print(f"DEBUG: Queue error: {repr(e)}")
         raise
 
 @app.get("/test")

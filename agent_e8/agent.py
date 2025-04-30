@@ -43,6 +43,7 @@ async def main():
             # === CLI Mode ===
         elif interaction_channel == "Telegram":
             try:
+                user_input = input("🧑 What do you want to solve today? (type 'exit' to quit) → ")
                 result = await multi_mcp.call_tool("get-next-telegram-message", {})
                 user_input = result.content[0].text
                 print(f"Telegram message: {user_input}")
@@ -65,9 +66,15 @@ async def main():
             if interaction_channel == "CLI":
                 print("\n💡 Final Answer:\n", final_response.replace("FINAL_ANSWER:", "").strip())
             elif interaction_channel == "Telegram":
-                print("Sending telegram message:", final_response.replace("FINAL_ANSWER:", "").strip())
-                await multi_mcp.call_tool("send-telegram-message", {"message": final_response.replace("FINAL_ANSWER:", "").strip()})
-                print("Sent telegram message")
+                print("Attempting to send telegram message")
+                try:
+                    print(f"Calling send-telegram-message with message: {final_response.replace('FINAL_ANSWER:', '').strip()}")
+                    await multi_mcp.call_tool("send-telegram-message", {
+                        "text": final_response.replace("FINAL_ANSWER:", "").strip()
+                    })
+                    print("Sending message to telegram completed")
+                except Exception as e:
+                    print(f"Error in sending telegram message: {str(e)}")
         except Exception as e:
             log("fatal", f"Agent failed: {e}")
             raise
@@ -92,8 +99,10 @@ if __name__ == "__main__":
 # What do you know about Don Tapscott and Anthony Williams?
 # What is the relationship between Gensol and Go-Auto?
 # which course are we teaching on Canvas LMS?
-# Find the current point standings of F1 Racers from the internet, then put the results into a Google Excel Sheet in Google Drive, and then share the link to this sheet with me on deepjyoti.saha@gmail.com. While wriiing the result into the spreadsheet, first check if a spreadsheet already exists in Google Drive, with a similar name, if yes, then update the results in the existing spreadsheet with the new results, make sure to update the exact cells; else if no spreadsheet exists, then create a new spreadsheet and update the results; Your email should be well formatted in HTML format.
+# Find the current point standings of F1 Racers from the internet, and update the results into a spreadsheet in Google Drive, and then share the link to this spreadsheet with me on deepjyoti.saha@gmail.com. While wriiing the result into the spreadsheet, first check if a spreadsheet already exists in Google Drive, with a similar name, if yes, then update the results in the existing spreadsheet with the new results, make sure to update the exact cells; else if no spreadsheet exists, then create a new spreadsheet and update the results; Your email should be well formatted in HTML format.
 
 #- ✅ When searching rely on first reponse from tools, as that is the best response probably. However, ALWAYS check if the response is already available in memory via a previous tool call with same parameters, as that is the most efficient use of time and resources.
+
+#Find the current point standings of F1 Racers from the internet and update the results into a spreadsheet in Google Drive, and then share the link to this spreadsheet with me on deepjyoti.saha@gmail.com. Update the final answer with the text only message in Telegram.
 
 
