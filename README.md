@@ -7,7 +7,7 @@ A powerful, modular AI agent system that can process user queries through multip
 ![Cortex-R Agent Screenshot](agent_e8/s8-screenshot.png)
 
 ## 📹 Demo Video
-Watch the system in action: [Cortex-R Agent Demo](https://youtu.be/your-video-id)
+Watch the system in action: [Cortex-R Agent Demo](https://youtu.be/AViGOt94KQ4)
 
 ## 🌟 Features
 
