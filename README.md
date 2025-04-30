@@ -92,7 +92,6 @@ mcp-sse-gdrive/            # Google Drive SSE Server
     ├── client_creds.json  # OAuth credentials
     └── drive_tokens.json  # Drive access tokens
 ```
-```
 
 ## 🚀 Getting Started
 
