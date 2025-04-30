@@ -1,10 +1,13 @@
-# Cortex-R Agent (EAG8)
-
 > **⚠️ Disclaimer**: This is an educational project created for learning purposes. While the system is designed to be functional, it is not guaranteed to work in all scenarios or environments. Users should exercise caution when using the system with real data and services.
+
+# Cortex-R Agent (EAG8)
 
 A powerful, modular AI agent system that can process user queries through multiple interaction channels (CLI and Telegram) and execute complex tasks using a variety of tools.
 
 ![Cortex-R Agent Screenshot](agent_e8/s8-screenshot.png)
+
+## 📹 Demo Video
+Watch the system in action: [Cortex-R Agent Demo](https://youtu.be/AViGOt94KQ4)
 
 ## 🌟 Features
 
