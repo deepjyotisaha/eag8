@@ -4,6 +4,8 @@
 
 A powerful, modular AI agent system that can process user queries through multiple interaction channels (CLI and Telegram) and execute complex tasks using a variety of tools.
 
+![Cortex-R Agent Screenshot](agent_e8/s8-screenshot.png)
+
 ## 🌟 Features
 
 - **Multi-Channel Support**
@@ -179,6 +181,3 @@ mcp-sse-gdrive/            # Google Drive SSE Server
   - Check if ports 8001-8003 are available
   - Verify all API keys and credentials are set
   - Ensure all required dependencies are installed with UV
-
-
-```

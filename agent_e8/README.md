@@ -4,6 +4,8 @@
 
 A powerful, modular AI agent system that can process user queries through multiple interaction channels (CLI and Telegram) and execute complex tasks using a variety of tools.
 
+![Cortex-R Agent Screenshot](agent_e8/s8-screenshot.png)
+
 ## 🌟 Features
 
 - **Multi-Channel Support**
@@ -68,14 +70,14 @@ agent_e8/                   # Main Agent
 └── sample.zip          # Sample files
 
 mcp-sse-telegram/           # Telegram SSE Server
-├── telegram_sse_server.py  # 🤖 Main Telegram server
+├── telegram_sse_server.py  # Main Telegram server
 ├── telegram_sse_test_client.py  # Test client
 └── .telegram_token.txt     # Telegram bot token
 
 mcp-sse-gmail/              # Gmail SSE Server
 ├── src/
 │   └── gmail/
-│       ├── gmail_sse_server.py    # 🤖 Main Gmail server
+│       ├── gmail_sse_server.py    # Main Gmail server
 │       ├── gmail_mcp_server.py    # MCP server implementation
 │       └── gmail_sse_test_client.py  # Test client
 └── .google/               # Google credentials
@@ -85,13 +87,12 @@ mcp-sse-gmail/              # Gmail SSE Server
 mcp-sse-gdrive/            # Google Drive SSE Server
 ├── src/
 │   └── mcp_sse_gdrive/
-│       ├── google_drive_sse_server.py  # 🤖 Main Drive server
+│       ├── google_drive_sse_server.py  # Main Drive server
 │       └── google_drive_service.py     # Drive service implementation
 ├── google_drive_sse_test_client.py     # Test client
 └── .google/               # Google credentials
     ├── client_creds.json  # OAuth credentials
     └── drive_tokens.json  # Drive access tokens
-```
 ```
 
 ## 🚀 Getting Started
@@ -180,6 +181,3 @@ mcp-sse-gdrive/            # Google Drive SSE Server
   - Check if ports 8001-8003 are available
   - Verify all API keys and credentials are set
   - Ensure all required dependencies are installed with UV
-
-
-```
